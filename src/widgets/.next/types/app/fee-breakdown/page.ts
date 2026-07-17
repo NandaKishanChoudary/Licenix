@@ -1,8 +1,8 @@
-// File: C:\Users\nkcho\OneDrive\Desktop\Licenix\smart-licensing-assistant\src\widgets\app\licensing-guide\page.tsx
-import * as entry from '../../../../app/licensing-guide/page.js'
+// File: C:\Users\nkcho\OneDrive\Desktop\Licenix\smart-licensing-assistant\src\widgets\app\fee-breakdown\page.tsx
+import * as entry from '../../../../app/fee-breakdown/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../app/licensing-guide/page.js')
+type TEntry = typeof import('../../../../app/fee-breakdown/page.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{

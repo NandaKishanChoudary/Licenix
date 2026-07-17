@@ -5,15 +5,35 @@
       "static/chunks/main-app.js",
       "static/chunks/app/layout.js"
     ],
-    "/licensing-guide/page": [
+    "/business-summary/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/licensing-guide/page.js"
+      "static/chunks/app/business-summary/page.js"
     ],
-    "/_not-found/page": [
+    "/compliance-dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/compliance-dashboard/page.js"
+    ],
+    "/document-checklist/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/document-checklist/page.js"
+    ],
+    "/license-results/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/license-results/page.js"
+    ],
+    "/fee-breakdown/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/fee-breakdown/page.js"
+    ],
+    "/application-timeline/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/application-timeline/page.js"
     ]
   }
 }

@@ -14,7 +14,7 @@ import { RegulationService } from '../../services/regulation.service.js';
 import { DocumentService } from '../../services/document.service.js';
 import { licensingInputSchema } from '../shared/licensing-input.schema.js';
 /**
- * Discovery tools for restaurant licensing in Kerala
+ * Discovery tools for licensing in Kerala
  */
 let DiscoveryTools = class DiscoveryTools {
     businessService;
@@ -29,19 +29,10 @@ let DiscoveryTools = class DiscoveryTools {
     }
     /**
      * Tool 1: business_analyzer
-     * Validates business type and location, identifies responsible departments
+     * Validates business type and location, identifies profile summary
      */
     async analyzeBusinessType(input, ctx) {
         ctx.logger.info('Analyzing business', { business: input.business, location: input.location });
-        return this.businessService.analyze(input.business, input.location);
-    }
-    /**
-     * Tool 2: license_discovery
-     * Returns every required license with details
-     */
-    async discoverLicenses(input, ctx) {
-        ctx.logger.info('Discovering licenses', { business: input.business, location: input.location });
-        // First validate the business
         const analysis = await this.businessService.analyze(input.business, input.location);
         if (!analysis.supported) {
             return {
@@ -49,11 +40,55 @@ let DiscoveryTools = class DiscoveryTools {
                 message: analysis.message
             };
         }
-        // Then discover licenses
-        const licenses = await this.licenseService.discover(analysis);
+        const regulations = await this.regulationService.lookup(analysis);
+        const applicableActs = regulations.map(r => r.act);
         return {
-            supported: true,
-            licenses
+            widget: '/business-summary',
+            data: {
+                businessName: input.business,
+                sector: analysis.sectorLabel || 'General Business',
+                state: analysis.state || 'Kerala',
+                district: analysis.district || 'Kerala',
+                riskCategory: analysis.businessCategory === 'hospital' || analysis.businessCategory === 'pharmacy' ? 'High Risk' : 'Medium Risk',
+                applicableActs,
+                applicableAuthorities: analysis.departments || []
+            }
+        };
+    }
+    /**
+     * Tool 2: license_discovery
+     * Returns every required license with details for cards
+     */
+    async discoverLicenses(input, ctx) {
+        ctx.logger.info('Discovering licenses', { business: input.business, location: input.location });
+        const analysis = await this.businessService.analyze(input.business, input.location);
+        if (!analysis.supported) {
+            return {
+                supported: false,
+                message: analysis.message
+            };
+        }
+        const rawLicenses = await this.licenseService.discover(analysis);
+        const licenses = rawLicenses.map(l => ({
+            id: l.id,
+            name: l.name,
+            mandatory: l.mandatory,
+            issuingDepartment: l.issuingDepartment,
+            description: l.description,
+            renewalFrequency: l.renewalFrequency,
+            estimatedFee: l.id === 'gst' || l.id === 'pan-registration' ? 'Free' : '₹500 - ₹5,000',
+            processingTime: l.id === 'gst' || l.id === 'pan-registration' ? '1-2 days' : '3-4 weeks',
+            status: 'pending',
+            governmentPortal: {
+                applyOnlineUrl: l.governmentPortal?.applyOnlineUrl || '#',
+                portalUrl: l.governmentPortal?.portalUrl || '#'
+            }
+        }));
+        return {
+            widget: '/license-results',
+            data: {
+                licenses
+            }
         };
     }
     /**
@@ -62,7 +97,6 @@ let DiscoveryTools = class DiscoveryTools {
      */
     async lookupRegulations(input, ctx) {
         ctx.logger.info('Looking up regulations', { business: input.business, location: input.location });
-        // First validate the business
         const analysis = await this.businessService.analyze(input.business, input.location);
         if (!analysis.supported) {
             return {
@@ -70,11 +104,17 @@ let DiscoveryTools = class DiscoveryTools {
                 message: analysis.message
             };
         }
-        // Then lookup regulations
         const regulations = await this.regulationService.lookup(analysis);
+        const warnings = regulations.map(r => r.complianceNotes);
         return {
-            supported: true,
-            regulations
+            widget: '/compliance-dashboard',
+            data: {
+                completed: 0,
+                pending: regulations.length,
+                expiringSoon: 0,
+                renewalRequired: 0,
+                warnings
+            }
         };
     }
     /**
@@ -83,7 +123,6 @@ let DiscoveryTools = class DiscoveryTools {
      */
     async getDocumentsAndForms(input, ctx) {
         ctx.logger.info('Getting documents and forms', { business: input.business, location: input.location });
-        // First validate the business
         const analysis = await this.businessService.analyze(input.business, input.location);
         if (!analysis.supported) {
             return {
@@ -91,11 +130,19 @@ let DiscoveryTools = class DiscoveryTools {
                 message: analysis.message
             };
         }
-        // Then get forms
         const forms = await this.documentService.getForms(analysis);
+        const documents = forms.flatMap(f => f.requiredDocuments.map(doc => ({
+            name: doc.name,
+            required: doc.required,
+            placeholder: `Upload copy of ${doc.name}`,
+            sampleUrl: f.officialForm?.url || '#',
+            verificationStatus: 'pending'
+        })));
         return {
-            supported: true,
-            forms
+            widget: '/document-checklist',
+            data: {
+                documents
+            }
         };
     }
 };
@@ -111,6 +158,7 @@ __decorate([
             openWorldHint: false
         }
     }),
+    Widget('/business-summary'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -127,6 +175,7 @@ __decorate([
             openWorldHint: false
         }
     }),
+    Widget('/license-results'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -143,6 +192,7 @@ __decorate([
             openWorldHint: true
         }
     }),
+    Widget('/compliance-dashboard'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -159,7 +209,7 @@ __decorate([
             openWorldHint: true
         }
     }),
-    Widget('licensing-guide'),
+    Widget('/document-checklist'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

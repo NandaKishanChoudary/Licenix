@@ -5,10 +5,9 @@ import { LicenseService } from '../../services/license.service.js';
 import { RegulationService } from '../../services/regulation.service.js';
 import { DocumentService } from '../../services/document.service.js';
 import { licensingInputSchema, type LicensingInput } from '../shared/licensing-input.schema.js';
-import type { BusinessAnalysis, LicenseDiscovery, RegulationLookup, DocumentAndForms } from '../../types/index.js';
 
 /**
- * Discovery tools for restaurant licensing in Kerala
+ * Discovery tools for licensing in Kerala
  */
 @Injectable({ deps: [BusinessService, LicenseService, RegulationService, DocumentService] })
 export class DiscoveryTools {
@@ -21,7 +20,7 @@ export class DiscoveryTools {
 
   /**
    * Tool 1: business_analyzer
-   * Validates business type and location, identifies responsible departments
+   * Validates business type and location, identifies profile summary
    */
   @Tool({
     name: 'business_analyzer',
@@ -34,17 +33,40 @@ export class DiscoveryTools {
       openWorldHint: false
     }
   })
+  @Widget('/business-summary')
   async analyzeBusinessType(
     input: LicensingInput,
     ctx: ExecutionContext
-  ): Promise<BusinessAnalysis> {
+  ): Promise<any> {
     ctx.logger.info('Analyzing business', { business: input.business, location: input.location });
-    return this.businessService.analyze(input.business, input.location);
+    const analysis = await this.businessService.analyze(input.business, input.location);
+    if (!analysis.supported) {
+      return {
+        supported: false,
+        message: analysis.message
+      };
+    }
+
+    const regulations = await this.regulationService.lookup(analysis);
+    const applicableActs = regulations.map(r => r.act);
+
+    return {
+      widget: '/business-summary',
+      data: {
+        businessName: input.business,
+        sector: analysis.sectorLabel || 'General Business',
+        state: analysis.state || 'Kerala',
+        district: analysis.district || 'Kerala',
+        riskCategory: analysis.businessCategory === 'hospital' || analysis.businessCategory === 'pharmacy' ? 'High Risk' : 'Medium Risk',
+        applicableActs,
+        applicableAuthorities: analysis.departments || []
+      }
+    };
   }
 
   /**
    * Tool 2: license_discovery
-   * Returns every required license with details
+   * Returns every required license with details for cards
    */
   @Tool({
     name: 'license_discovery',
@@ -57,13 +79,13 @@ export class DiscoveryTools {
       openWorldHint: false
     }
   })
+  @Widget('/license-results')
   async discoverLicenses(
     input: LicensingInput,
     ctx: ExecutionContext
-  ): Promise<LicenseDiscovery> {
+  ): Promise<any> {
     ctx.logger.info('Discovering licenses', { business: input.business, location: input.location });
 
-    // First validate the business
     const analysis = await this.businessService.analyze(input.business, input.location);
     if (!analysis.supported) {
       return {
@@ -72,11 +94,28 @@ export class DiscoveryTools {
       };
     }
 
-    // Then discover licenses
-    const licenses = await this.licenseService.discover(analysis);
+    const rawLicenses = await this.licenseService.discover(analysis);
+    const licenses = rawLicenses.map(l => ({
+      id: l.id,
+      name: l.name,
+      mandatory: l.mandatory,
+      issuingDepartment: l.issuingDepartment,
+      description: l.description,
+      renewalFrequency: l.renewalFrequency,
+      estimatedFee: l.id === 'gst' || l.id === 'pan-registration' ? 'Free' : '₹500 - ₹5,000',
+      processingTime: l.id === 'gst' || l.id === 'pan-registration' ? '1-2 days' : '3-4 weeks',
+      status: 'pending',
+      governmentPortal: {
+        applyOnlineUrl: l.governmentPortal?.applyOnlineUrl || '#',
+        portalUrl: l.governmentPortal?.portalUrl || '#'
+      }
+    }));
+
     return {
-      supported: true,
-      licenses
+      widget: '/license-results',
+      data: {
+        licenses
+      }
     };
   }
 
@@ -95,13 +134,13 @@ export class DiscoveryTools {
       openWorldHint: true
     }
   })
+  @Widget('/compliance-dashboard')
   async lookupRegulations(
     input: LicensingInput,
     ctx: ExecutionContext
-  ): Promise<RegulationLookup> {
+  ): Promise<any> {
     ctx.logger.info('Looking up regulations', { business: input.business, location: input.location });
 
-    // First validate the business
     const analysis = await this.businessService.analyze(input.business, input.location);
     if (!analysis.supported) {
       return {
@@ -110,11 +149,18 @@ export class DiscoveryTools {
       };
     }
 
-    // Then lookup regulations
     const regulations = await this.regulationService.lookup(analysis);
+    const warnings = regulations.map(r => r.complianceNotes);
+
     return {
-      supported: true,
-      regulations
+      widget: '/compliance-dashboard',
+      data: {
+        completed: 0,
+        pending: regulations.length,
+        expiringSoon: 0,
+        renewalRequired: 0,
+        warnings
+      }
     };
   }
 
@@ -133,14 +179,13 @@ export class DiscoveryTools {
       openWorldHint: true
     }
   })
-  @Widget('licensing-guide')
+  @Widget('/document-checklist')
   async getDocumentsAndForms(
     input: LicensingInput,
     ctx: ExecutionContext
-  ): Promise<DocumentAndForms> {
+  ): Promise<any> {
     ctx.logger.info('Getting documents and forms', { business: input.business, location: input.location });
 
-    // First validate the business
     const analysis = await this.businessService.analyze(input.business, input.location);
     if (!analysis.supported) {
       return {
@@ -149,11 +194,20 @@ export class DiscoveryTools {
       };
     }
 
-    // Then get forms
     const forms = await this.documentService.getForms(analysis);
+    const documents = forms.flatMap(f => f.requiredDocuments.map(doc => ({
+      name: doc.name,
+      required: doc.required,
+      placeholder: `Upload copy of ${doc.name}`,
+      sampleUrl: f.officialForm?.url || '#',
+      verificationStatus: 'pending'
+    })));
+
     return {
-      supported: true,
-      forms
+      widget: '/document-checklist',
+      data: {
+        documents
+      }
     };
   }
 }

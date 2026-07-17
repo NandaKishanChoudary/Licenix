@@ -7,9 +7,8 @@ import { CostService } from '../../services/cost.service.js';
 import { TimelineService } from '../../services/timeline.service.js';
 import { AiAdvisorService } from '../../services/ai-advisor.service.js';
 import { type LicensingInput } from '../shared/licensing-input.schema.js';
-import type { CostEstimate, TimelineEstimate, AdvisorRecommendation, LicensingPackage } from '../../types/index.js';
 /**
- * Guidance tools for restaurant licensing in Kerala
+ * Guidance tools for licensing in Kerala
  */
 export declare class GuidanceTools {
     private businessService;
@@ -22,23 +21,23 @@ export declare class GuidanceTools {
     constructor(businessService: BusinessService, licenseService: LicenseService, regulationService: RegulationService, documentService: DocumentService, costService: CostService, timelineService: TimelineService, aiAdvisorService: AiAdvisorService);
     /**
      * Tool 5: cost_estimator
-     * Estimates licensing costs with caching
+     * Estimates licensing costs with caching and wraps in fee-breakdown widget format
      */
-    estimateCosts(input: LicensingInput, ctx: ExecutionContext): Promise<CostEstimate>;
+    estimateCosts(input: LicensingInput, ctx: ExecutionContext): Promise<any>;
     /**
      * Tool 6: timeline_estimator
-     * Estimates licensing timelines with caching
+     * Estimates licensing timelines with caching and wraps in timeline widget format
      */
-    estimateTimelines(input: LicensingInput, ctx: ExecutionContext): Promise<TimelineEstimate>;
+    estimateTimelines(input: LicensingInput, ctx: ExecutionContext): Promise<any>;
     /**
      * Tool 7: ai_advisor
-     * Provides AI-generated or heuristic-based recommendations
+     * Provides AI-generated recommendations and wraps in compliance-dashboard widget format
      */
-    getAdvisorRecommendations(input: LicensingInput, ctx: ExecutionContext): Promise<AdvisorRecommendation>;
+    getAdvisorRecommendations(input: LicensingInput, ctx: ExecutionContext): Promise<any>;
     /**
      * Tool 8: generate_licensing_package (orchestrator)
-     * Runs the full licensing pipeline and returns a complete guide
+     * Runs the full licensing pipeline and returns a complete guide wrapped in business-summary widget format
      */
-    generateLicensingPackage(input: LicensingInput, ctx: ExecutionContext): Promise<LicensingPackage>;
+    generateLicensingPackage(input: LicensingInput, ctx: ExecutionContext): Promise<any>;
 }
 //# sourceMappingURL=guidance.tools.d.ts.map

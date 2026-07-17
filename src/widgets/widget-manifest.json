@@ -16,33 +16,216 @@
             "result": 8,
             "expression": "5 + 3 = 8"
           }
-        },
+        }
+      ]
+    },
+    {
+      "uri": "/license-results",
+      "name": "License Results",
+      "description": "Display every required license as beautiful cards",
+      "examples": [
         {
-          "name": "Multiplication Example",
-          "description": "Shows the result of multiplying 6 × 7",
+          "name": "Pharmacy Licenses in Kollam",
+          "description": "Licenses required for opening a pharmacy",
           "data": {
-            "operation": "multiply",
-            "a": 6,
-            "b": 7,
-            "result": 42,
-            "expression": "6 × 7 = 42"
-          }
-        },
-        {
-          "name": "Division Example",
-          "description": "Shows the result of dividing 20 ÷ 4",
-          "data": {
-            "operation": "divide",
-            "a": 20,
-            "b": 4,
-            "result": 5,
-            "expression": "20 ÷ 4 = 5"
+            "widget": "/license-results",
+            "data": {
+              "licenses": [
+                {
+                  "id": "trade-license",
+                  "name": "Trade License",
+                  "mandatory": true,
+                  "issuingDepartment": "Municipal Corporation",
+                  "description": "Basic business registration",
+                  "renewalFrequency": "Annual",
+                  "estimatedFee": "₹500 - ₹1,000",
+                  "processingTime": "3 weeks",
+                  "status": "pending"
+                },
+                {
+                  "id": "drug-license",
+                  "name": "Drug License",
+                  "mandatory": true,
+                  "issuingDepartment": "Drugs Control Department",
+                  "description": "Mandatory license for retail distribution of medicines",
+                  "renewalFrequency": "Every 5 years",
+                  "estimatedFee": "₹5,000 - ₹10,000",
+                  "processingTime": "4-6 weeks",
+                  "status": "pending"
+                }
+              ]
+            }
           }
         }
-      ],
-      "tags": ["calculator", "math", "result"]
+      ]
+    },
+    {
+      "uri": "/document-checklist",
+      "name": "Document Checklist",
+      "description": "Display required documents and forms",
+      "examples": [
+        {
+          "name": "General Documents",
+          "description": "Standard identity and property documents",
+          "data": {
+            "widget": "/document-checklist",
+            "data": {
+              "documents": [
+                {
+                  "name": "Aadhaar Card",
+                  "required": true,
+                  "placeholder": "Upload Aadhaar copy",
+                  "sampleUrl": "https://uidai.gov.in/",
+                  "verificationStatus": "verified"
+                },
+                {
+                  "name": "Rental Agreement",
+                  "required": true,
+                  "placeholder": "Upload signed lease",
+                  "sampleUrl": "#",
+                  "verificationStatus": "pending"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uri": "/fee-breakdown",
+      "name": "Fee Breakdown",
+      "description": "Display detailed licensing cost breakdown",
+      "examples": [
+        {
+          "name": "Pharmacy Setup Costs",
+          "description": "Cost breakdown for starting a pharmacy",
+          "data": {
+            "widget": "/fee-breakdown",
+            "data": {
+              "governmentFees": "₹5,500 - ₹11,000",
+              "registrationCharges": "₹1,000 - ₹2,000",
+              "professionalCharges": "₹3,000 - ₹5,000",
+              "totalCost": "₹9,500 - ₹18,000"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uri": "/application-timeline",
+      "name": "Licensing Timeline",
+      "description": "Vertical licensing and application roadmap timeline",
+      "examples": [
+        {
+          "name": "Pharmacy Timeline",
+          "description": "Estimated processing sequence for pharmacy",
+          "data": {
+            "widget": "/application-timeline",
+            "data": {
+              "steps": [
+                {
+                  "name": "GST Registration",
+                  "estimatedDays": "1-2 days",
+                  "status": "Completed",
+                  "department": "GST Authority"
+                },
+                {
+                  "name": "Trade License",
+                  "estimatedDays": "21 days",
+                  "status": "In-Progress",
+                  "department": "Municipal Corporation"
+                },
+                {
+                  "name": "Drug License",
+                  "estimatedDays": "30-45 days",
+                  "status": "Pending",
+                  "department": "Drugs Control Department"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uri": "/compliance-dashboard",
+      "name": "Compliance Dashboard",
+      "description": "Displays overall compliance statuses and key advice",
+      "examples": [
+        {
+          "name": "Compliance Overview",
+          "description": "Summary of active vs pending compliance items",
+          "data": {
+            "widget": "/compliance-dashboard",
+            "data": {
+              "completed": 2,
+              "pending": 4,
+              "expiringSoon": 0,
+              "renewalRequired": 1,
+              "warnings": [
+                "Qualified Pharmacist is mandatory at all times during operations",
+                "Ensure drug license is displayed prominently on the premises"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uri": "/government-links",
+      "name": "Government Portals",
+      "description": "Official portals and form links for business registration",
+      "examples": [
+        {
+          "name": "Kerala Portals",
+          "description": "Official portals for Kerala state clearances",
+          "data": {
+            "widget": "/government-links",
+            "data": {
+              "portals": [
+                {
+                  "name": "K-SMART Trade License Portal",
+                  "officialWebsite": "https://ksmart.lsgkerala.gov.in/",
+                  "applyOnlineUrl": "https://ksmart.lsgkerala.gov.in/ksmart/pages/service-details/trade-license",
+                  "downloadFormsUrl": "#",
+                  "contactInfo": "+91-471-2726543",
+                  "officeAddress": "LSGD Kerala, Thiruvananthapuram"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uri": "/business-summary",
+      "name": "Business Profile Summary",
+      "description": "General summary profile of the analyzed business",
+      "examples": [
+        {
+          "name": "Pharmacy Summary",
+          "description": "Profile details for Kollam Pharmacy",
+          "data": {
+            "widget": "/business-summary",
+            "data": {
+              "businessName": "Health First Pharmacy",
+              "sector": "Pharmacy / Medical Store",
+              "state": "Kerala",
+              "district": "Kollam",
+              "riskCategory": "Medium-High Risk",
+              "applicableActs": [
+                "Drugs and Cosmetics Act, 1940",
+                "Kerala Municipality Act, 1994"
+              ],
+              "applicableAuthorities": [
+                "Drugs Control Department",
+                "Kollam Municipal Corporation"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
-  "generatedAt": "2025-01-01T00:00:00.000Z"
+  "generatedAt": "2026-07-17T23:56:00.000Z"
 }
-

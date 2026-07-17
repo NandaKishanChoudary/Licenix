@@ -1,4 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/licensing-guide/page": "app/licensing-guide/page.js"
+  "/license-results/page": "app/license-results/page.js",
+  "/compliance-dashboard/page": "app/compliance-dashboard/page.js",
+  "/document-checklist/page": "app/document-checklist/page.js",
+  "/fee-breakdown/page": "app/fee-breakdown/page.js",
+  "/business-summary/page": "app/business-summary/page.js",
+  "/application-timeline/page": "app/application-timeline/page.js"
 }

@@ -40,7 +40,7 @@ export class GuidanceTools {
     }
   })
   @Cache({ ttl: 86400, key: (input: any) => `cost:${input.business}:${input.location}` })
-  @Widget('/fee-breakdown')
+  @Widget('fee-breakdown')
   async estimateCosts(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -93,7 +93,7 @@ export class GuidanceTools {
     }
   })
   @Cache({ ttl: 86400, key: (input: any) => `timeline:${input.business}:${input.location}` })
-  @Widget('/application-timeline')
+  @Widget('application-timeline')
   async estimateTimelines(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -139,7 +139,7 @@ export class GuidanceTools {
       openWorldHint: false
     }
   })
-  @Widget('/compliance-dashboard')
+  @Widget('compliance-dashboard')
   async getAdvisorRecommendations(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -201,7 +201,7 @@ export class GuidanceTools {
       openWorldHint: true
     }
   })
-  @Widget('/business-summary')
+  @Widget('business-summary')
   async generateLicensingPackage(
     input: LicensingInput,
     ctx: ExecutionContext

@@ -33,7 +33,7 @@ export class DiscoveryTools {
       openWorldHint: false
     }
   })
-  @Widget('/business-summary')
+  @Widget('business-summary')
   async analyzeBusinessType(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -79,7 +79,7 @@ export class DiscoveryTools {
       openWorldHint: false
     }
   })
-  @Widget('/license-results')
+  @Widget('license-results')
   async discoverLicenses(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -134,7 +134,7 @@ export class DiscoveryTools {
       openWorldHint: true
     }
   })
-  @Widget('/compliance-dashboard')
+  @Widget('compliance-dashboard')
   async lookupRegulations(
     input: LicensingInput,
     ctx: ExecutionContext
@@ -179,7 +179,7 @@ export class DiscoveryTools {
       openWorldHint: true
     }
   })
-  @Widget('/document-checklist')
+  @Widget('document-checklist')
   async getDocumentsAndForms(
     input: LicensingInput,
     ctx: ExecutionContext

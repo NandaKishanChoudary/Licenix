@@ -177,7 +177,7 @@ __decorate([
         }
     }),
     Cache({ ttl: 86400, key: (input) => `cost:${input.business}:${input.location}` }),
-    Widget('/fee-breakdown'),
+    Widget('fee-breakdown'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -195,7 +195,7 @@ __decorate([
         }
     }),
     Cache({ ttl: 86400, key: (input) => `timeline:${input.business}:${input.location}` }),
-    Widget('/application-timeline'),
+    Widget('application-timeline'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -212,7 +212,7 @@ __decorate([
             openWorldHint: false
         }
     }),
-    Widget('/compliance-dashboard'),
+    Widget('compliance-dashboard'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -230,7 +230,7 @@ __decorate([
             openWorldHint: true
         }
     }),
-    Widget('/business-summary'),
+    Widget('business-summary'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

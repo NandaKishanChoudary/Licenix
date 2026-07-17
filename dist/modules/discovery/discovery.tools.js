@@ -158,7 +158,7 @@ __decorate([
             openWorldHint: false
         }
     }),
-    Widget('/business-summary'),
+    Widget('business-summary'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -175,7 +175,7 @@ __decorate([
             openWorldHint: false
         }
     }),
-    Widget('/license-results'),
+    Widget('license-results'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -192,7 +192,7 @@ __decorate([
             openWorldHint: true
         }
     }),
-    Widget('/compliance-dashboard'),
+    Widget('compliance-dashboard'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
@@ -209,7 +209,7 @@ __decorate([
             openWorldHint: true
         }
     }),
-    Widget('/document-checklist'),
+    Widget('document-checklist'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
